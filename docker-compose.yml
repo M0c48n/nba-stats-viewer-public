@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=nba_stats_viewer
+      - MYSQL_USER=nsvieweruser
+      - MYSQL_PASSWORD=nsviewerpass 
+    ports:
+      - 33306:3306
+
+  web:
+    build: .
+    restart: always
+    volumes:
+      - ./src/:/code
+    ports:
+      - "8000:8000"
+    command: python3 manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+
+volumes:
+  db_data:

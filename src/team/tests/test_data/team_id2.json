@@ -1,0 +1,38 @@
+{
+    "get": "teams/",
+    "parameters": {
+        "id": "2"
+    },
+    "errors": [],
+    "results": 1,
+    "response": [
+        {
+            "id": 2,
+            "name": "Boston Celtics",
+            "nickname": "Celtics",
+            "code": "BOS",
+            "city": "Boston",
+            "logo": "https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Celtics_de_Boston_logo.svg/1024px-Celtics_de_Boston_logo.svg.png",
+            "allStar": false,
+            "nbaFranchise": true,
+            "leagues": {
+                "standard": {
+                    "conference": "East",
+                    "division": "Atlantic"
+                },
+                "vegas": {
+                    "conference": "summer",
+                    "division": null
+                },
+                "utah": {
+                    "conference": "East",
+                    "division": "Atlantic"
+                },
+                "sacramento": {
+                    "conference": "East",
+                    "division": "Atlantic"
+                }
+            }
+        }
+    ]
+}

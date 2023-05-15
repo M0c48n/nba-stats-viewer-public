@@ -1,0 +1,37 @@
+from django.db import models
+
+# Create your models here.
+class Game(models.Model):
+    game_id = models.IntegerField(primary_key=True)
+    date = models.DateTimeField()
+    season = models.IntegerField()
+    visitors_team_id = models.IntegerField()
+    visitors_point = models.IntegerField()
+    home_team_id = models.IntegerField()
+    home_point = models.IntegerField()
+    win_team_id = models.IntegerField()
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Stats(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    player_id = models.IntegerField()
+    team_id = models.IntegerField()
+    points = models.IntegerField()
+    pos = models.CharField(max_length=10, null=True)
+    min = models.CharField(max_length=10)
+    fgm = models.IntegerField()
+    fga = models.IntegerField()
+    fgp = models.CharField(max_length=10)
+    ftm = models.IntegerField()
+    fta = models.IntegerField()
+    ftp = models.CharField(max_length=10)
+    tpm = models.IntegerField()
+    tpa = models.IntegerField()
+    tpp = models.CharField(max_length=10)
+    reb = models.IntegerField()
+    assists = models.IntegerField()
+    pFouls = models.IntegerField()
+    steals = models.IntegerField()
+    turnovers = models.IntegerField()
+    blocks = models.IntegerField()

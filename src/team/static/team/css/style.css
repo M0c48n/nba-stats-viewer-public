@@ -1,0 +1,43 @@
+html {
+    word-break: break-all;
+    /*英字を単語中でも改行させる*/
+}
+
+@media screen and (max-width: 480px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+.header {
+    background: #FEB272;
+}
+
+.header-title {
+    display: flex;
+    align-items: baseline;
+}
+
+.header-logo {
+    width: 25px;
+    height: 25px;
+
+}
+
+.team-icon {
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+}
+
+.team-link {
+    text-decoration: none;
+    color: black;
+}
+
+.current-team-logo{
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+
+}

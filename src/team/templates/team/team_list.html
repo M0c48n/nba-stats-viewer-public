@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block customcss %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'team/css/style.css' %}">
+{% endblock customcss %}
+
+{% block contents %}
+<main class="main">
+    <div class="container-md">
+        <h2 class="fs-2 mt-5">East Team</h2>
+        <div class="row row-cols-5">
+            {% for team in teams.east_teams %}
+            <div class="col text-center mt-4">
+                <a href="{% url 'team:player_list' team.id%}" class="team-link">
+                    {% if team.logo %}
+                    <img src="{{ team.logo }}" alt="team icon" class="team-icon">
+                    {% else %}
+                    <img src="{% static 'team/img/team_icon.png' %}" alt="team icon" class="team-icon">
+                    {% endif %}
+                    <p class="fs-5 mt-4">{{ team.name }}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <h2 class="fs-2 mt-5">West Team</h2>
+        <div class="row row-cols-5">
+            {% for team in teams.west_teams %}
+            <div class="col text-center mt-4">
+                <a href="{% url 'team:player_list' team.id%}" class="team-link">
+                {% if team.logo %}
+                <img src="{{ team.logo }}" alt="team icon" class="team-icon">
+                {% else %}
+                <img src="{% static 'team/img/team_icon.png' %}" alt="team icon" class="team-icon">
+                {% endif %}
+                <p class="fs-5 mt-4">{{ team.name }}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div> 
+    </div>
+</main>
+{% endblock contents %}

@@ -1,0 +1,87 @@
+name: CI/CD
+
+on:
+  push:
+
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY: nba-stats-viewer-web
+  ECS_SERVICE: nba-stats-viewer-WebService-twFzu7hF14mw
+  ECS_CLUSTER: nba-stats-viewer
+  ECS_TASK_DEFINITION: .aws/task_definitions/nba-stats-viewer-web_task-definition.json
+  CONTAINER_NAME: web
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.8
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run Tests
+      run: |
+        cd src
+        python manage.py test
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        DEBUG: ${{ secrets.DEBUG }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        X_RAPIDAPI_HOST: ${{ secrets.X_RAPIDAPI_HOST }}
+        X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
+  deploy:
+    needs: test
+    # if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        # Build a docker container and
+        # push it to ECR so that it can
+        # be deployed to ECS.
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile.web .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION }}
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
+
+

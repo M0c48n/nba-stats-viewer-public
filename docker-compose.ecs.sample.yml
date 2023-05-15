@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com/nba-stats-viewer-mysql:latest
+    environment:
+      - MYSQL_DATABASE=xxxxxxxxxxxx
+      - MYSQL_USER=xxxxxxxxxxxx
+      - MYSQL_PASSWORD=xxxxxxxxxxxx
+      - MYSQL_ROOT_PASSWORD=xxxxxxxxxxxx
+    # ロードバランサーに接続しないようコメントアウト
+    # ports:
+    #   - "3306:3306"
+    volumes:
+      - db_ecs_data:/var/lib/mysql
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: nba_stats_viewer-db
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: ecs
+
+  web:
+    image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com/nba-stats-viewer-web:latest
+    ports:
+      - target: 8000
+        x-aws-protocol: http
+    command: sh /code/run-my-app.sh
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: nba_stats_viewer-web
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: ecs
+    depends_on:
+      - db
+
+  nginx:
+    image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com/nba-stats-viewer-nginx:latest
+    ports:
+      - "80:80"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: nba_stats_viewer-nginx
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: ecs
+    depends_on:
+      - web
+
+volumes:
+  db_ecs_data:

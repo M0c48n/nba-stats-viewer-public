@@ -41,29 +41,8 @@ def stats(request, player_id):
     # 返却値に必要なデータをDBから取得
     db_stats = Stats.objects.select_related('game').filter(
         player_id=player_id, game__season=latest_season)
-    stats_list = []
-    for s in db_stats:
-        date = s.game.date
-
-        win_frag = True if s.team_id == s.game.win_team_id else False
-        game_point = f'{s.game.visitors_point}-{s.game.home_point}'
-        min = s.min
-        fg = f'{s.fgm}-{s.fga}'
-        fg_pct = s.fgp
-        three_pt = f'{s.tpm}-{s.tpa}'
-        three_pt_pct = s.tpp
-        ft = f'{s.ftm}-{s.fta}'
-        ft_pct = s.ftp
-        reb = s.reb
-        ast = s.assists
-        blk = s.blocks
-        stl = s.steals
-        pf = s.pFouls
-        to = s.turnovers
-        pts = s.points
-
-        stats_list.append({'date': date, 'win_frag': win_frag, 'game_point': game_point, 'min': min, 'fg': fg, 'fg_pct': fg_pct, 'three_pt': three_pt,
-                           'three_pt_pct': three_pt_pct, 'ft': ft, 'ft_pct': ft_pct, 'reb': reb, 'ast': ast, 'blk': blk, 'stl': stl, 'pf': pf, 'to': to, 'pts': pts})
+    # DBデータからstatsのリストを作成する
+    stats_list = create_stats_list(db_stats)
 
     context = {'current_player_name': plyer_name, 'stats_list': stats_list}
 
@@ -86,3 +65,26 @@ def call_api(url):
         raise Exception(f'Error: {url} - {e}')
 
     return response_data
+
+def create_stats_list(db_stats):
+    return [
+        {
+            'date': s.game.date,
+            'win_frag': s.team_id == s.game.win_team_id,
+            'game_point': f'{s.game.visitors_point}-{s.game.home_point}',
+            'min': s.min,
+            'fg': f'{s.fgm}-{s.fga}',
+            'fg_pct': s.fgp,
+            'three_pt': f'{s.tpm}-{s.tpa}',
+            'three_pt_pct': s.tpp,
+            'ft': f'{s.ftm}-{s.fta}',
+            'ft_pct': s.ftp,
+            'reb': s.reb,
+            'ast': s.assists,
+            'blk': s.blocks,
+            'stl': s.steals,
+            'pf': s.pFouls,
+            'to': s.turnovers,
+            'pts': s.points
+        } for s in db_stats
+    ]

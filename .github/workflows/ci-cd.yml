@@ -38,7 +38,7 @@ jobs:
         X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
   deploy:
     needs: test
-    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout

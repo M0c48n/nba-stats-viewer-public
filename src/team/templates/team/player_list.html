@@ -22,10 +22,10 @@
                     {% for player in player_list %}
                     <tr>
                         <th scope="row"><a href="{% url 'player:player' player.id%}">{{ player.name }}</a></th>
-                        <td>{{ player.position }}</td>
-                        <td>{{ player.age }}</td>
-                        <td>{{ player.weight }}</td>
-                        <td>{{ player.height }}</td>
+                        <td>{{ player.position|default:"-" }}</td>
+                        <td>{{ player.age|default:"-" }}</td>
+                        <td>{{ player.weight|default:"-" }}</td>
+                        <td>{{ player.height|default:"-" }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

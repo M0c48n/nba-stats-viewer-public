@@ -39,16 +39,29 @@ def stats(request, player_id):
     except Exception as e:
         logger.error(f'シーズン情報の取得に失敗しました: {e}')
         return HttpResponseServerError()
-    # 最新のシーズンを取得
-    latest_season = seasons['response'][-1]
+    # すべてのシーズンを取得
+    all_seasons = seasons['response']
+    # 降順にソート
+    all_seasons.sort(reverse=True)
+    # 選択されたシーズンを取得
+    selected_season = request.GET.get('season')
+    if selected_season is None:
+        # クエリパラメータに'season'が指定されていない場合は最新シーズンを設定
+        selected_season = all_seasons[0]
 
-    # DBから選択したプレイヤーの最新シーズンのstatsを取得
+    # DBから選択したプレイヤー、選択したシーズンのstatsを日付の降順に取得
     db_stats = Stats.objects.select_related('game').filter(
-        player_id=player_id, game__season=latest_season)
+        player_id=player_id, game__season=selected_season
+    ).order_by('-game__date')
     # 取得したstatsから表示用のリストを作成
     stats_list = create_stats_list(db_stats)
 
-    context = {'current_player_name': plyer_name, 'stats_list': stats_list}
+    context = {
+        'current_player_name': plyer_name,
+        'stats_list': stats_list,
+        'all_seasons': all_seasons,
+        'selected_season': selected_season
+    }
 
     return render(request, 'player/stats.html', context)
 
@@ -75,6 +88,7 @@ def call_api(url):
         raise Exception(f'Error: {url} - {e}')
 
     return response_data
+
 
 def create_stats_list(db_stats):
     """

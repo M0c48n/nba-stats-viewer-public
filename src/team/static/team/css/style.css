@@ -35,9 +35,17 @@ html {
     color: black;
 }
 
-.current-team-logo{
+.current-team-logo {
     width: 65px;
     height: 65px;
     object-fit: contain;
 
+}
+
+.stats-table {
+    min-width: 980px;
+}
+
+.player-table {
+    min-width: 380px; 
 }

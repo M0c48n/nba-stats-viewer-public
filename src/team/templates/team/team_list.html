@@ -9,7 +9,7 @@
 <main class="main">
     <div class="container-md">
         <h2 class="fs-2 mt-5">East Team</h2>
-        <div class="row row-cols-5">
+        <div class="row row-cols-3 row-cols-md-5">
             {% for team in teams.east_teams %}
             <div class="col text-center mt-4">
                 <a href="{% url 'team:player_list' team.id%}" class="team-link">
@@ -24,7 +24,7 @@
             {% endfor %}
         </div>
         <h2 class="fs-2 mt-5">West Team</h2>
-        <div class="row row-cols-5">
+        <div class="row row-cols-3 row-cols-md-5">
             {% for team in teams.west_teams %}
             <div class="col text-center mt-4">
                 <a href="{% url 'team:player_list' team.id%}" class="team-link">

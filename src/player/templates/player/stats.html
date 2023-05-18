@@ -14,57 +14,58 @@
                 </select>
             </div>
         </div>
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">DATE</th>
-                    <th scope="col">OPP</th>
-                    <th scope="col">RESULT</th>
-                    <th scope="col">MIN</th>
-                    <th scope="col">FG</th>
-                    <th scope="col">FG%</th>
-                    <th scope="col">3PT</th>
-                    <th scope="col">3P%</th>
-                    <th scope="col">FT</th>
-                    <th scope="col">FT%</th>
-                    <th scope="col">REB</th>
-                    <th scope="col">AST</th>
-                    <th scope="col">BLK</th>
-                    <th scope="col">STL</th>
-                    <th scope="col">PF</th>
-                    <th scope="col">TO</th>
-                    <th scope="col">PTS</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for stats in stats_list %}
+        <div class="table-responsive mt-5">
+            <table class="table table-striped table-hover stats-table">
+                <thead>
                     <tr>
-                        <td>{{ stats.date|date:"Y n/j" }}</td>
-                        <td>{{ stats.home_and_away }} {{ stats.opp_team_name }}</td>
-                        {% if stats.win_frag %}
-                        <td>W {{ stats.game_point }}</td>
-                        {% else %}
-                        <td>L {{ stats.game_point }}</td>
-                        {% endif %}
-                        <td>{{ stats.min }}</td>
-                        <td>{{ stats.fg }}</td>
-                        <td>{{ stats.fg_pct }}%</td>
-                        <td>{{ stats.three_pt }}</td>
-                        <td>{{ stats.three_pt_pct }}</td>
-                        <td>{{ stats.ft }}</td>
-                        <td>{{ stats.ft_pct }}</td>
-                        <td>{{ stats.reb }}</td>
-                        <td>{{ stats.ast }}</td>
-                        <td>{{ stats.blk }}</td>
-                        <td>{{ stats.stl }}</td>
-                        <td>{{ stats.pf }}</td>
-                        <td>{{ stats.to }}</td>
-                        <td>{{ stats.pts }}</td>
-                        
+                        <th scope="col">DATE</th>
+                        <th scope="col">OPP</th>
+                        <th scope="col">RESULT</th>
+                        <th scope="col">MIN</th>
+                        <th scope="col">FG</th>
+                        <th scope="col">FG%</th>
+                        <th scope="col">3PT</th>
+                        <th scope="col">3P%</th>
+                        <th scope="col">FT</th>
+                        <th scope="col">FT%</th>
+                        <th scope="col">REB</th>
+                        <th scope="col">AST</th>
+                        <th scope="col">BLK</th>
+                        <th scope="col">STL</th>
+                        <th scope="col">PF</th>
+                        <th scope="col">TO</th>
+                        <th scope="col">PTS</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for stats in stats_list %}
+                        <tr>
+                            <td>{{ stats.date|date:"Y n/j" }}</td>
+                            <td>{{ stats.home_and_away }} {{ stats.opp_team_name }}</td>
+                            {% if stats.win_frag %}
+                            <td>W {{ stats.game_point }}</td>
+                            {% else %}
+                            <td>L {{ stats.game_point }}</td>
+                            {% endif %}
+                            <td>{{ stats.min }}</td>
+                            <td>{{ stats.fg }}</td>
+                            <td>{{ stats.fg_pct }}%</td>
+                            <td>{{ stats.three_pt }}</td>
+                            <td>{{ stats.three_pt_pct }}</td>
+                            <td>{{ stats.ft }}</td>
+                            <td>{{ stats.ft_pct }}</td>
+                            <td>{{ stats.reb }}</td>
+                            <td>{{ stats.ast }}</td>
+                            <td>{{ stats.blk }}</td>
+                            <td>{{ stats.stl }}</td>
+                            <td>{{ stats.pf }}</td>
+                            <td>{{ stats.to }}</td>
+                            <td>{{ stats.pts }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </main>
 <script>

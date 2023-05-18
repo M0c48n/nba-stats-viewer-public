@@ -19,7 +19,6 @@
                 <thead>
                     <tr>
                         <th scope="col">DATE</th>
-                        <th scope="col">OPP</th>
                         <th scope="col">RESULT</th>
                         <th scope="col">MIN</th>
                         <th scope="col">FG</th>
@@ -41,11 +40,10 @@
                     {% for stats in stats_list %}
                         <tr>
                             <td>{{ stats.date|date:"Y n/j" }}</td>
-                            <td>{{ stats.home_and_away }} {{ stats.opp_team_name }}</td>
                             {% if stats.win_frag %}
-                            <td>W {{ stats.game_point }}</td>
+                            <td class="text-success">W {{ stats.game_point }}</td>
                             {% else %}
-                            <td>L {{ stats.game_point }}</td>
+                            <td class="text-danger">L {{ stats.game_point }}</td>
                             {% endif %}
                             <td>{{ stats.min }}</td>
                             <td>{{ stats.fg }}</td>

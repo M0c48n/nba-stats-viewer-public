@@ -2,6 +2,7 @@ import logging
 
 import requests
 from django.conf import settings
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponseServerError
 from django.shortcuts import render
 from requests.adapters import HTTPAdapter
@@ -55,6 +56,21 @@ def stats(request, player_id):
     ).order_by('-game__date')
     # 取得したstatsから表示用のリストを作成
     stats_list = create_stats_list(db_stats)
+
+    # ページネーターを作成（1ページあたりデータ数20）
+    paginator = Paginator(stats_list, 20)
+    # クエリパラメータから現在のページ番号を取得
+    page = request.GET.get('page')
+
+    try:
+        # 指定されたページ番号のデータを取得
+        stats_list = paginator.page(page)
+    except PageNotAnInteger:
+        # ページ番号が整数でない場合は、最初のページを表示
+        stats_list = paginator.page(1)
+    except EmptyPage:
+        # 指定したページ番号が存在しない場合は、最後のページを表示
+        stats_list = paginator.page(paginator.num_pages)
 
     context = {
         'current_player_name': plyer_name,

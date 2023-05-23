@@ -68,6 +68,51 @@
                 </tbody>
             </table>
         </div>
+        {% if stats_list.paginator.num_pages > 1 %}
+            <div class="pagination justify-content-center">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if stats_list.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ stats_list.previous_page_number }}&season={{ selected_season }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">前のページ</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">前のページ</span>
+                                </span>
+                            </li>
+                        {% endif %}
+                        {% for i in stats_list.paginator.page_range %}
+                            {% if stats_list.number == i %}
+                                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}&season={{ selected_season }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if stats_list.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ stats_list.next_page_number }}&season={{ selected_season }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">次のページ</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">次のページ</span>
+                                </span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}
     </div>
 </main>
 <script>
@@ -75,6 +120,7 @@
         const season = selectElement.value;
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('season', season);
+        urlParams.set('page', 1); // ページをリセット
         window.location.search = urlParams.toString();
     }
 </script>

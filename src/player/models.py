@@ -4,7 +4,7 @@ from django.db import models
 class Game(models.Model):
     game_id = models.IntegerField(primary_key=True)
     date = models.DateTimeField()
-    season = models.IntegerField()
+    season = models.IntegerField(db_index=True)
     visitors_team_id = models.IntegerField()
     visitors_point = models.IntegerField()
     home_team_id = models.IntegerField()
@@ -15,7 +15,7 @@ class Game(models.Model):
 
 class Stats(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    player_id = models.IntegerField()
+    player_id = models.IntegerField(db_index=True)
     team_id = models.IntegerField()
     points = models.IntegerField()
     pos = models.CharField(max_length=10, null=True)

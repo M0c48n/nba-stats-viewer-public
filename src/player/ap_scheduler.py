@@ -65,7 +65,7 @@ def insert_all_stats():
 def start():
     # insert_all_game_and_stats()  # 初回時のみ実行
     scheduler = BackgroundScheduler()
-    scheduler.add_job(insert_game_and_stats, 'cron', hour=12)  # 毎日12時に実行(UTC時間)(日本時間3時)
+    scheduler.add_job(insert_game_and_stats, 'cron', hour=12)  # 毎日日本時間12時に実行(UTC時間3時)
     scheduler.start()
 
 
@@ -136,13 +136,12 @@ def db_insert_game(game_data):
     try:
         Game.objects.bulk_create(games)  # DB挿入
     except Exception as e:
-        print(e)
+        logger.error(f'gameのDB挿入でエラーが発生しました。エラー内容: {e}')
 
     return game_id_list
 
 
 def db_insert_stats(stats_data):
-    print('db_insert_stats呼び出し')
     stats = []
     for response in stats_data['response']:
         game = Game(game_id=response['game']['id'])
@@ -174,9 +173,9 @@ def db_insert_stats(stats_data):
 
     try:
         Stats.objects.bulk_create(stats)  # DB挿入
-        print('DB挿入完了')
+        logger.info('statsのDB挿入が完了しました。')
     except Exception as e:
-        logger.error(f'statsのDB挿入でエラーが発生しました。')
+        logger.error(f'statsのDB挿入でエラーが発生しました。エラー内容: {e}')
 
 
 class TooManyRequestsError(Exception):

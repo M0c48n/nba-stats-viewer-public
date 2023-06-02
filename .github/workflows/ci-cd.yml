@@ -34,6 +34,7 @@ jobs:
       run: |
         cd src
         python manage.py test
+        python manage.py collectstatic --noinput
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
         DEBUG: ${{ secrets.DEBUG }}
@@ -43,7 +44,7 @@ jobs:
 
   deploy:
     needs: test
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout

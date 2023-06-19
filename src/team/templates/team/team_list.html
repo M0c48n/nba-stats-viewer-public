@@ -14,9 +14,9 @@
             <div class="col text-center mt-4">
                 <a href="{% url 'team:player_list' team.id%}" class="team-link">
                     {% if team.logo %}
-                    <img src="{{ team.logo }}" alt="team icon" class="team-icon">
+                    <img src="{{ team.logo }}" alt="{{ team.name }}" class="team-icon">
                     {% else %}
-                    <img src="{% static 'team/img/team_icon.png' %}" alt="team icon" class="team-icon">
+                    <img src="{% static 'team/img/team_icon.png' %}" alt="{{ team.name }}" class="team-icon">
                     {% endif %}
                     <p class="fs-5 mt-4">{{ team.name }}</p>
                 </a>
